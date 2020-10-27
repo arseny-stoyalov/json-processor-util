@@ -40,26 +40,28 @@ class JsonCleanerTest extends AnyFunSuite with Matchers {
 
   val expected: String =
     """{
-      |  "key1" : "string1",
-      |  "key2" : {
-      |    "innerKey1" : "string1",
-      |    "innerKey2" : "string2"
-      |  },
-      |  "key4" : {
-      |    "key5" : {
-      |      "abd" : 2,
-      |      "key6" : "string1"
+      |
+      |    "key1": "string1",
+      |    "key2": {
+      |        "innerKey1": "string1",
+      |        "innerKey2": "string2"
+      |    },
+      |    "key4": {
+      |        "key5": {
+      |            "abd": 2,
+      |            "key6": "string1"
+      |        }
       |    }
-      |  }
-      |}""".stripMargin
+      |}
+      | """.stripMargin
 
   test("testRecursiveCleanUp") {
     val jsonEither: Either[ParsingFailure, Json] = parse(testJsonCase)
     jsonEither shouldBe a[Right[ParsingFailure, Json]]
 
     val result = cleaner.recursiveCleanUp(jsonEither.getOrElse(Json.Null))
-    result.toString().replaceAll("\\s+", " ")
-      .shouldEqual(expected.replaceAll("\\s+", " "))
+    result.toString().replaceAll("\\s+", "")
+      .shouldEqual(expected.replaceAll("\\s+", ""))
   }
 
 
